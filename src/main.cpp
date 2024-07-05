@@ -3,8 +3,6 @@
 #include "wiFiFunctions.h"
 #include "flashFunc.h"
 
-
-
 // https://www.instructables.com/ESP-12F-ESP8266-Module-Minimal-Breadboard-for-Flas/
 // https://randomnerdtutorials.com/esp8266-nodemcu-client-server-wi-fi/
 
@@ -20,9 +18,7 @@
 blink ledBlink(LED_BUILTIN);
 flashFunctions flashF;
 
-wifiFunct wifiF;
-
-
+wifiFunctions wifiF;
 
 
 void setup() {
@@ -32,13 +28,14 @@ void setup() {
   Serial.printf("Fecha y Hora: %s, %s\n", __DATE__, __TIME__);
   ledBlink.init();
   flashF.checkFlash();
+  wifiF.init();
   
-  //spiffsInit();
-  //wifiF.init();
+  
   Serial.println("Setup terminado");
 }
 
 void loop() {
   ledBlink.update(500);
+  wifiF.handleClient();
 }
 
