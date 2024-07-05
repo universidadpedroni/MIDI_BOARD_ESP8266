@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Controller</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MIDI Controller Configuration</h1>
+        <div class="button-container">
+            <button onclick="showSettings('button1-settings')">Button 1</button>
+            <button onclick="showSettings('button2-settings')">Button 2</button>
+            <button onclick="showSettings('button3-settings')">Button 3</button>
+            <button onclick="showSettings('button4-settings')">Button 4</button>
+            <button onclick="showSettings('button5-settings')">Button 5</button>
+            <button onclick="showSettings('button6-settings')">Button 6</button>
+            <button onclick="showSettings('button7-settings')">Button 7</button>
+        </div>
+        <div class="settings-container">
+            <div id="button1-settings" class="settings">
+                <h2>Settings for Button 1</h2>
+                <label for="midi-channel-1">MIDI Channel:</label>
+                <input type="number" id="midi-channel-1" min="1" max="16">
+                <label for="pc-cc-1">PC or CC:</label>
+                <input type="text" id="pc-cc-1">
+                <label for="value-1">Value:</label>
+                <input type="number" id="value-1" min="0" max="127">
+                <label for="toggle-value-1">Toggle Value (0/127):</label>
+                <input type="checkbox" id="toggle-value-1">
+                <button onclick="saveSettings(1)">Save</button>
+            </div>
+            <div id="button2-settings" class="settings">
+                <h2>Settings for Button 2</h2>
+                <label for="midi-channel-2">MIDI Channel:</label>
+                <input type="number" id="midi-channel-2" min="1" max="16">
+                <label for="pc-cc-2">PC or CC:</label>
+                <input type="text" id="pc-cc-2">
+                <label for="value-2">Value:</label>
+                <input type="number" id="value-2" min="0" max="127">
+                <label for="toggle-value-2">Toggle Value (0/127):</label>
+                <input type="checkbox" id="toggle-value-2">
+                <button onclick="saveSettings(2)">Save</button>
+            </div>
+            <div id="button3-settings" class="settings">
+                <h2>Settings for Button 3</h2>
+                <label for="midi-channel-3">MIDI Channel:</label>
+                <input type="number" id="midi-channel-3" min="1" max="16">
+                <label for="pc-cc-3">PC or CC:</label>
+                <input type="text" id="pc-cc-3">
+                <label for="value-3">Value:</label>
+                <input type="number" id="value-3" min="0" max="127">
+                <label for="toggle-value-3">Toggle Value (0/127):</label>
+                <input type="checkbox" id="toggle-value-3">
+                <button onclick="saveSettings(3)">Save</button>
+            </div>
+            <div id="button4-settings" class="settings">
+                <h2>Settings for Button 4</h2>
+                <label for="midi-channel-4">MIDI Channel:</label>
+                <input type="number" id="midi-channel-4" min="1" max="16">
+                <label for="pc-cc-4">PC or CC:</label>
+                <input type="text" id="pc-cc-4">
+                <label for="value-4">Value:</label>
+                <input type="number" id="value-4" min="0" max="127">
+                <label for="toggle-value-4">Toggle Value (0/127):</label>
+                <input type="checkbox" id="toggle-value-4">
+                <button onclick="saveSettings(4)">Save</button>
+            </div>
+            <div id="button5-settings" class="settings">
+                <h2>Settings for Button 5</h2>
+                <label for="midi-channel-5">MIDI Channel:</label>
+                <input type="number" id="midi-channel-5" min="1" max="16">
+                <label for="pc-cc-5">PC or CC:</label>
+                <input type="text" id="pc-cc-5">
+                <label for="value-5">Value:</label>
+                <input type="number" id="value-5" min="0" max="127">
+                <label for="toggle-value-5">Toggle Value (0/127):</label>
+                <input type="checkbox" id="toggle-value-5">
+                <button onclick="saveSettings(5)">Save</button>
+            </div>
+            <div id="button6-settings" class="settings">
+                <h2>Settings for Button 6</h2>
+                <label for="midi-channel-6">MIDI Channel:</label>
+                <input type="number" id="midi-channel-6" min="1" max="16">
+                <label for="pc-cc-6">PC or CC:</label>
+                <input type="text" id="pc-cc-6">
+                <label for="value-6">Value:</label>
+                <input type="number" id="value-6" min="0" max="127">
+                <label for="toggle-value-6">Toggle Value (0/127):</label>
+                <input type="checkbox" id="toggle-value-6">
+                <button onclick="saveSettings(6)">Save</button>
+            </div>
+            <div id="button7-settings" class="settings">
+                <h2>Settings for Button 7</h2>
+                <label for="midi-channel-7">MIDI Channel:</label>
+                <input type="number" id="midi-channel-7" min="1" max="16">
+                <label for="pc-cc-7">PC or CC:</label>
+                <input type="text" id="pc-cc-7">
+                <label for="value-7">Value:</label>
+                <input type="number" id="value-7" min="0" max="127">
+                <label for="toggle-value-7">Toggle Value (0/127):</label>
+                <input type="checkbox" id="toggle-value-7">
+                <button onclick="saveSettings(7)">Save</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showSettings(id) {
+            var settings = document.querySelectorAll('.settings');
+            settings.forEach(setting => setting.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function saveSettings(buttonId) {
+            const midiChannel = document.getElementById(`midi-channel-${buttonId}`).value;
+            const pcCc = document.getElementById(`pc-cc-${buttonId}`).value;
+            const value = document.getElementById(`value-${buttonId}`).value;
+            const toggleValue = document.getElementById(`toggle-value-${buttonId}`).checked ? 127 : 0;
+
+            const data = {
+                midiChannel,
+                pcCc,
+                value,
+                toggleValue
+            };
+
+            fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (response.ok) {
+                    alert(`Settings for Button ${buttonId} saved successfully!`);
+                } else {
+                    alert(`Failed to save settings for Button ${buttonId}.`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

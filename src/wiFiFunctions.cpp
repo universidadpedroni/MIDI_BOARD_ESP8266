@@ -1,39 +1,39 @@
-#include <Arduino.h>
 #include "wiFiFunctions.h"
-//#include <ESP8266WiFi.h>
-//#include <ESPAsyncWebServer.h>
 
-
-
-// Constructor para inicializar el servidor en el puerto 80
 wifiFunct::wifiFunct() : server(80) {}
 
 void wifiFunct::init() {
-    // Inicializar LittleFS
-    if (!LittleFS.begin()) {
-        Serial.println("Error al montar LittleFS");
-        return;
-    }
-
-    // Configurar la IP fija
+    // Configure fixed IP address for the access point
     if (!WiFi.softAPConfig(local_IP, gateway, subnet)) {
-        Serial.println("Fallo al configurar la IP.");
+        Serial.println("Failed to configure IP.");
     }
 
-    // Iniciar el punto de acceso
+    // Start the access point
     if (!WiFi.softAP(ssid, password)) {
-        Serial.println("Fallo al iniciar el AP.");
+        Serial.println("Failed to start AP.");
     } else {
-        Serial.println("Punto de acceso iniciado.");
+        Serial.println("Access point started.");
         Serial.print("IP Address: ");
         Serial.println(WiFi.softAPIP());
     }
 
-    // Configurar las rutas del servidor
+    // Initialize SPIFFS
+    if (!SPIFFS.begin()) {
+        Serial.println("Failed to mount file system");
+        return;
+    }
+
+    // Handle root URL request with embedded HTML content
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-        request->send(LittleFS, "/index.html", "text/html");
+        request->send(SPIFFS, "/index.html", "text/html");
     });
 
-    // Iniciar el servidor
+    // Serve static files from SPIFFS (e.g., CSS, JavaScript)
+    server.on("/styles.css", HTTP_GET, [](AsyncWebServerRequest *request) {
+        request->send(SPIFFS, "/styles.css", "text/css");
+    });
+
+    // Start the server
     server.begin();
 }
+
