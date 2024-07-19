@@ -1,6 +1,7 @@
 #include "flashFunc.h"
 
 void flashFunctions::checkFlash(){
+   #ifndef ESP32
     uint32_t realSize = ESP.getFlashChipRealSize();
     uint32_t ideSize = ESP.getFlashChipSize();
     FlashMode_t ideMode = ESP.getFlashChipMode();
@@ -17,4 +18,5 @@ void flashFunctions::checkFlash(){
     } else {
         Serial.println("Flash Chip configuration ok.\n");
     }
+    #endif
 }
