@@ -39,4 +39,6 @@ class pushButton{
         bool toggle;
 };
 
+const int NUM_PUSH_BUTTON = 7;
+
 #endif

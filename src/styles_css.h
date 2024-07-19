@@ -3,15 +3,41 @@
 const char styles_css[] = R"rawliteral(
 /* Estilos para el formulario y otros elementos */
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #222; /* Dark grey background */
-    color: #eee; /* Light text color */
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
     padding: 20px;
 }
 
-h2 {
-    color: #4CAF50; /* Greenish accent color */
+h1 {
+    color: #ffcc00;
 }
+h2 {
+    color: #ffcc00;
+}
+button {
+            display: block;
+            width: 200px;
+            margin: 10px auto;
+            padding: 15px;
+            font-size: 16px;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        .update-button {
+            margin-top: 30px;
+            background-color: #ff5733;
+        }
+        .update-button:hover {
+            background-color: #ff704d;
+        }
 
 form {
     background-color: #333; /* Darker grey form background */
@@ -34,10 +60,13 @@ select, input[type="number"], input[type="submit"] {
 }
 
 input[type="submit"] {
-    background-color: #4CAF50; /* Green button */
-    cursor: pointer;
-    border: none;
     font-size: 16px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
 }
 
 /* Estilos específicos para el iframe oculto */
