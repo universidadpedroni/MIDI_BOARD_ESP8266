@@ -312,7 +312,8 @@ void serverInit() {
         String inputMessage;
         String inputParam;
         if(request->hasParam("buttonIndex")){
-            int pushButtonIndex = request->getParam("buttonIndex")->value().toInt();
+            int pushButtonIndex = request->getParam("buttonIndex")->value().toInt() - 1;
+            Serial.printf("Index: %d\n", pushButtonIndex);
             if (pushButtonIndex < 0 || pushButtonIndex >= NUM_PUSH_BUTTON) {
                 request->send(400, "text/plain", "Invalid button index");
                 return;
@@ -320,27 +321,18 @@ void serverInit() {
             // Cambio en Canal Midi
             if(request->hasParam(PB_MIDI_CH_NAME)){
                 inputMessage = request->getParam(PB_MIDI_CH_NAME)->value();
-                inputParam = PB_MIDI_CH_NAME;
-                
-                Serial.printf("Index: %d\n", pushButtonIndex);
                 myPB[pushButtonIndex].midiChannel = inputMessage.toInt() - 1;
                 dataChanged = true;
             } else if (request->hasParam(PB_CC_PC_NAME)){
                 inputMessage = request->getParam(PB_CC_PC_NAME)->value();
-                inputParam = PB_CC_PC_NAME;
-                
                 inputMessage == "PC" ? myPB[pushButtonIndex].CC_or_PC = MIDI_CH_PRGM_CHANGE : myPB[pushButtonIndex].CC_or_PC = MIDI_CH_CTRL_CHANGE;
                 dataChanged = true;
             } else if (request->hasParam(PB_VALUE_NAME)) {
                 inputMessage = request->getParam(PB_VALUE_NAME)->value();
-                inputParam = PB_VALUE_NAME;
-                
                 myPB[pushButtonIndex].value = inputMessage.toInt();
                 dataChanged = true;
             } else if (request->hasParam(PB_TOGGLE_NAME)) {
                 inputMessage = request->getParam(PB_TOGGLE_NAME)->value();
-                inputParam = PB_TOGGLE_NAME;
-                
                 myPB[pushButtonIndex].toggle = inputMessage.equals("Yes");
                 dataChanged = true;
             } else {
@@ -348,7 +340,7 @@ void serverInit() {
                 inputParam = "none";
             }
             Serial.printf("[%d] Param: %s, Message: %s\n",millis(), inputParam.c_str(), inputMessage.c_str());
-            request->send(200, "text/plain", inputMessage);
+            //request->send(200, "text/plain", inputMessage);
         }
         
     });
