@@ -16,7 +16,6 @@
 #include "pushButtonFunctions.h"
 #include "EEPROM.h"
 
-
 AsyncWebServer server(80);
 pushButton myPB[NUM_PUSH_BUTTON];
 HardwareSerial SerialMidi = Serial1;
@@ -94,12 +93,15 @@ bool wifiInit(bool AP){
     return wifiConnected;
 }
 
+
 void pushButtonInit(){
     for(int i = 0; i < NUM_PUSH_BUTTON; i++){
         myPB[i].load(i);
-        //myPB[i].loadDefaults(i);
-        //myPB[i].begin(MIDI_CHANNEL_1 + i, MIDI_CH_CTRL_CHANGE, 12, i * 10, false);    
-        //myPB[i].save(i);
+#if LOAD_PUSHBUTTONS_INIT_CONFIG
+            myPB[i].loadDefaults(i);
+            myPB[i].begin(MIDI_CHANNEL_1 + i, MIDI_CH_CTRL_CHANGE, 12, i * 10, false);    
+            myPB[i].save(i);
+#endif    
     }
 }
 

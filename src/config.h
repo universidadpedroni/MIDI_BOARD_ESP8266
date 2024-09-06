@@ -2,6 +2,9 @@
 #define CONFIG_H
 
 #include <Arduino.h>
+
+#define LOAD_PUSHBUTTONS_INIT_CONFIG false
+
 #ifdef ESP32
     #include <WiFi.h>
     const unsigned long BAUDRATE = 115200;
