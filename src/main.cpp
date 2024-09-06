@@ -19,8 +19,34 @@
 
 AsyncWebServer server(80);
 pushButton myPB[NUM_PUSH_BUTTON];
+HardwareSerial SerialMidi = Serial1;
 bool dataChanged = false;
 
+void sendMIDI(int id){
+    SerialMidi.write(myPB[id].CC_or_PC | myPB[id].midiChannel);
+	SerialMidi.write(myPB[id].param);
+    if(myPB[id].CC_or_PC == MIDI_CH_CTRL_CHANGE) SerialMidi.write(myPB[id].value);
+    
+    // manejo de los casos especiales
+    // toggle
+    if(myPB[id].toggle) myPB[id].value == myPB[id].value_max? myPB[id].value = myPB[id].value_min : myPB[id].value = myPB[id].value_max;
+    // incremento del valor de PC
+    if(myPB[id].CC_or_PC == MIDI_CH_PRGM_CHANGE){
+        myPB[id].param++;
+        if(myPB[id].param > myPB[id].value_max)  myPB[id].param = myPB[id].value_min;
+        myPB[id].save(id);
+    }
+
+}
+
+void testMidiComm(){
+    for(int i = 0; i < NUM_PUSH_BUTTON; i++){
+        Serial.print("Enviando datos MIDI: ");
+        myPB[i].showConfig(i);
+        sendMIDI(i);
+        delay(100);
+    }
+}
 
 void notFound(AsyncWebServerRequest *request){
     request->send(404, "text/plain", "Not found");
@@ -139,8 +165,8 @@ void serverInit() {
     // Ruta para el botón Update (OTA)
     server.on("/update", HTTP_GET, [](AsyncWebServerRequest *request) {
         // Redirigir a OTA
-        request->redirect("/update");
-        //request->send(200, "text/plain", "OTA Update Page");
+        //request->redirect("/update");
+        request->send(200, "text/plain", "OTA Update Page - Under Construccion");
         
         
     });
@@ -200,11 +226,16 @@ void serverInit() {
 void setup(){
     Serial.begin(BAUDRATE);
     Serial.printf("Fecha y Hora: %s, %s\n", __DATE__, __TIME__);
+    SerialMidi.begin(MIDI_BAUDRATE);
     //flashF.checkFlash();
-    EEPROM.begin(512);
+    EEPROM.begin(EEPROM_SIZE);
     pushButtonInit();
+    Serial.println("Configuracion de switches");
     pushButtonShowConfig();
+    Serial.print("Conectando a WiFi");
     if(wifiInit(WiFi_NODE)) serverInit();
+    while(1){testMidiComm();}
+    
     Serial.println("Setup terminado");
     
 }

@@ -10,6 +10,8 @@
     const unsigned long BAUDRATE = 74880;
 #endif
 
+const unsigned long MIDI_BAUDRATE = 31250;
+
 const char* PB_MIDI_CH_NAME = "PB_MIDI_CH";
 const char* PB_CC_PC_NAME = "PB_CC_PC";
 const char* PB_VALUE_NAME = "PB_VALUE";
@@ -33,5 +35,6 @@ const char* hostName = "ESP8266 Midi Board";
 
 
 const int NUM_PUSH_BUTTON = 7;
+const size_t EEPROM_SIZE = 256;    // 512 max. Cada pulsador usa 25 bytes. 7 pulsadores, 175 bytes.
 
 #endif
